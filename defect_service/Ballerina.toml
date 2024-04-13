@@ -1,6 +1,6 @@
 [package]
 org = "jequo"
-name = "defect"
+name = "defect_service"
 version = "0.1.0"
 distribution = "2201.8.6"
 
@@ -9,7 +9,7 @@ observabilityIncluded = true
 
 [persist]
 datastore = "mysql"
-module = "defect.datasource"
+module = "defect_service.store"
 
 [[platform.java17.dependency]]
 groupId = "io.ballerina.stdlib"
