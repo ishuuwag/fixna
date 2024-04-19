@@ -2,8 +2,14 @@ import defect_service.store;
 import ballerina/http;
 import ballerina/time;
 
+configurable string USER = ?
+configurable string PASSWORD = ?
+configurable string HOST = ?
+configurable string PORT = ?
+configurable string DATABASE = ?
 
-store:Client db_client = check new;
+
+store:Client db_client = check new (HOST, USER, PASSWORD, DATABASE, PORT);
 int counter = 1;
 
 # A service representing a network-accessible API
