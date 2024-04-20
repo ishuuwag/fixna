@@ -24,5 +24,5 @@ docker compose up --build -d
 Run the app
 
 ```bash
-bal run
+bal run -- -host=localhost -port=3306 -user=root -password=admin@FixNa9 -database=fixna -connectionOptions="{ssl: {mode: "PREFERRED", allowPublicKeyRetrieval: true}}"
 ```
