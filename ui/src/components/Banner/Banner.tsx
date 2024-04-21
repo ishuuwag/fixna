@@ -2,8 +2,22 @@ import { Button } from "antd";
 import QueueAnim from "rc-queue-anim";
 import TweenOne from "rc-tween-one";
 import BannerSVG from "./BannerSVGAnim";
+import { useAuthContext } from "@asgardeo/auth-react";
+import { useEffect, useState } from "react";
 
 export const Banner = () => {
+  const { state, signIn, signOut } = useAuthContext();
+  const [isLoading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log("state", state);
+  });
+
+  const handleSignIn = () => {
+    setLoading(true);
+    signIn();
+  };
+
   return (
     <div className="banner-wrapper">
       <QueueAnim className="banner-title-wrapper" type={"right"}>
@@ -16,15 +30,16 @@ export const Banner = () => {
         <h1 key="h1">Fix Namibia</h1>
         <p key="content">Report incidents and defects in your town</p>
         <div key="button" className="button-wrapper">
-          <a
-            href="https://accounts.asgardeo.io"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Button
+            type="primary"
+            loading={isLoading}
+            disabled={isLoading}
+            onClick={() => handleSignIn()}
           >
-            <Button type="primary">Login</Button>
-          </a>
+            Login
+          </Button>
           <a
-            href="https://asgardeo.io/signup"
+            href={process.env.REACT_APP_REGISTRATION_URL}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -32,12 +47,6 @@ export const Banner = () => {
               Register
             </Button>
           </a>
-          {/* <GitHubButton
-            key="github-button"
-            type="stargazers"
-            namespace="ant-design"
-            repo="ant-design-pro"
-          /> */}
         </div>
       </QueueAnim>
       <TweenOne animation={{ opacity: 1 }} className="banner-image-wrapper">

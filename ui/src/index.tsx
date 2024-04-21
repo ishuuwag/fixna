@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "@asgardeo/auth-react";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -11,7 +12,22 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthProvider
+        config={{
+          signInRedirectURL:
+            process.env.REACT_APP_REDIRECT_URL ?? "http://localhost:3000",
+          signOutRedirectURL:
+            process.env.REACT_APP_REDIRECT_URL ?? "http://localhost:3000",
+          clientID:
+            process.env.REACT_APP_CLIENT_ID ?? "rW80oacvfXi_BM2HlRYlYIhQlxwa",
+          baseUrl:
+            process.env.REACT_APP_ASGARDEO_URL ??
+            "https://api.asgardeo.io/t/logicppna",
+          scope: ["openid", "profile"],
+        }}
+      >
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
