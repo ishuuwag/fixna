@@ -4,12 +4,19 @@ import TweenOne from "rc-tween-one";
 import BannerSVG from "./BannerSVGAnim";
 import { useAuthContext } from "@asgardeo/auth-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import * as n from "../../routes/navigation";
 
 export const Banner = () => {
-  const { state, signIn, signOut } = useAuthContext();
+  const { state, signIn } = useAuthContext();
   const [isLoading, setLoading] = useState<boolean>(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    if (state.isAuthenticated) {
+      navigate(n.DASHBOARD);
+    }
     console.log("state", state);
   });
 
