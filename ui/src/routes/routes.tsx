@@ -2,7 +2,6 @@ import { FC, lazy, LazyExoticComponent, Suspense } from "react";
 
 import * as n from "./navigation";
 import LoadingScreen from "../components/Loader/Loader";
-
 const Loadable = (Component: LazyExoticComponent<FC>) => (props: any) => {
   return (
     <Suspense fallback={<LoadingScreen />}>
@@ -12,6 +11,7 @@ const Loadable = (Component: LazyExoticComponent<FC>) => (props: any) => {
 };
 
 const Landing = Loadable(lazy(() => import("../pages/Landing/Landing")));
+const Dashboard = Loadable(lazy(() => import("../pages/Dashboard/Dashboard")));
 
 // 404/Error page
 const Error = Loadable(lazy(() => import("../pages/404/404")));
@@ -21,6 +21,10 @@ const routes = () => {
     {
       path: n.HOME,
       element: <Landing />,
+    },
+    {
+      path: n.DASHBOARD,
+      element: <Dashboard />,
     },
     {
       path: "*",
