@@ -2,11 +2,11 @@ import defect_service.store;
 import ballerina/http;
 import ballerina/time;
 
-// configurable string USER = ?;
-// configurable string PASSWORD = ?;
-// configurable string HOST = ?;
-// configurable string PORT = ?;
-// configurable string DATABASE = ?;
+configurable string host = ?;
+configurable int port = ?;
+configurable string user = ?;
+configurable string password = ?;
+configurable string database = ?;
 
 
 store:Client db_client = check new();
