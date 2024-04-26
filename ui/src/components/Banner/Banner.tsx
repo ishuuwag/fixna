@@ -45,7 +45,10 @@ export const Banner = () => {
             Login
           </Button>
           <a
-            href={process.env.REACT_APP_REGISTRATION_URL}
+            href={
+              process.env.REACT_APP_REGISTRATION_URL ??
+              "https://accounts.asgardeo.io/t/logicppna/accountrecoveryendpoint/register.do"
+            }
             target="_blank"
             rel="noopener noreferrer"
           >

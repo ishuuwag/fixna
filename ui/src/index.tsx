@@ -6,17 +6,6 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@asgardeo/auth-react";
 
-declare global {
-  interface Window {
-    config: {
-      cliendId: string;
-      redirectUrl: string;
-      asgardeoUrl: string;
-      registrationUrl: string;
-    };
-  }
-}
-
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -26,12 +15,16 @@ root.render(
       <AuthProvider
         config={{
           signInRedirectURL:
-            process.env.REACT_APP_REDIRECT_URL ?? window.config.redirectUrl,
+            process.env.REACT_APP_REDIRECT_URL ??
+            "https://fixna.us-cdp2.choreoapps.dev",
           signOutRedirectURL:
-            process.env.REACT_APP_REDIRECT_URL ?? window.config.redirectUrl,
-          clientID: process.env.REACT_APP_CLIENT_ID ?? window.config.cliendId,
+            process.env.REACT_APP_REDIRECT_URL ??
+            "https://fixna.us-cdp2.choreoapps.dev",
+          clientID:
+            process.env.REACT_APP_CLIENT_ID ?? "Vhfy5n6BodmKviKxQXKYsa4eW7sa",
           baseUrl:
-            process.env.REACT_APP_ASGARDEO_URL ?? window.config.asgardeoUrl,
+            process.env.REACT_APP_ASGARDEO_URL ??
+            "https://api.asgardeo.io/t/logicppna	",
           scope: ["openid", "profile"],
         }}
       >
