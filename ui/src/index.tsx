@@ -6,6 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@asgardeo/auth-react";
 
+declare global {
+  interface Window {
+    config: {
+      cliendId: string;
+      redirectUrl: string;
+      asgardeoUrl: string;
+      registrationUrl: string;
+    };
+  }
+}
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -15,14 +26,12 @@ root.render(
       <AuthProvider
         config={{
           signInRedirectURL:
-            process.env.REACT_APP_REDIRECT_URL ?? "http://localhost:3000",
+            process.env.REACT_APP_REDIRECT_URL ?? window.config.redirectUrl,
           signOutRedirectURL:
-            process.env.REACT_APP_REDIRECT_URL ?? "http://localhost:3000",
-          clientID:
-            process.env.REACT_APP_CLIENT_ID ?? "rW80oacvfXi_BM2HlRYlYIhQlxwa",
+            process.env.REACT_APP_REDIRECT_URL ?? window.config.redirectUrl,
+          clientID: process.env.REACT_APP_CLIENT_ID ?? window.config.cliendId,
           baseUrl:
-            process.env.REACT_APP_ASGARDEO_URL ??
-            "https://api.asgardeo.io/t/logicppna",
+            process.env.REACT_APP_ASGARDEO_URL ?? window.config.asgardeoUrl,
           scope: ["openid", "profile"],
         }}
       >

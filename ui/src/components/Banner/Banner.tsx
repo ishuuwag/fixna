@@ -17,7 +17,6 @@ export const Banner = () => {
     if (state.isAuthenticated) {
       navigate(n.DASHBOARD);
     }
-    console.log("state", state);
   });
 
   const handleSignIn = () => {
