@@ -34,7 +34,7 @@ export const Banner = () => {
           />
         </div>
         <h1 key="h1">Fix Namibia</h1>
-        <p key="content">Report incidents and defects in your town</p>
+        <p key="content">Report defects in your town</p>
         <div key="button" className="button-wrapper">
           <Button
             type="primary"
