@@ -21,7 +21,6 @@ import { getApiConfig } from "../../utils/api";
 
 const { Header, Content } = Layout;
 const { Option } = Select;
-const { TextArea } = Input;
 
 const layout = {
   labelCol: { span: 8 },
@@ -53,29 +52,24 @@ const Dashboard = () => {
       setFileList(newFileList);
     },
     beforeUpload: (file) => {
-      console.log(file.uid)
       setFileList([...fileList, file]);
-
       return false;
     },
     fileList,
   };
 
   const onFinish = async () => {
-    console.log(fileList.length)
-
     const t = await getAccessToken();
-    const c = getApiConfig(t)
-    console.log(c.accessToken)
+    const c = getApiConfig(t);
     const api = new DefectsApi(c);
+    const desc = form.getFieldValue("description") as string;
+    const town = form.getFieldValue("town") as string;
     try {
-      const img = fileList[0] as unknown as File
-      console.log(img)
+      const img = fileList[0] as unknown as File;
       const res = await api.createDefect(
-        { description: "test", town: "Windhoek", longitude: 27, latitude: 22 },
+        { description: desc, town: town, longitude: 27, latitude: 22 },
         img
       );
-
       console.log(res);
     } catch (err) {
       console.log(err);
@@ -139,14 +133,10 @@ const Dashboard = () => {
               label="Description"
               rules={[{ required: true }]}
             >
-              <TextArea rows={4} maxLength={6} />
+              <Input />
             </Form.Item>
             <Form.Item name="town" label="Town" rules={[{ required: true }]}>
-              <Select
-                placeholder="Select your town"
-                //onChange={onGenderChange}
-                allowClear
-              >
+              <Select placeholder="Select your town" allowClear>
                 <Option value="Windhoek">Windhoek</Option>
               </Select>
             </Form.Item>
