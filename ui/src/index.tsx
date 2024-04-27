@@ -15,14 +15,16 @@ root.render(
       <AuthProvider
         config={{
           signInRedirectURL:
-            process.env.REACT_APP_REDIRECT_URL ?? "http://localhost:3000",
+            process.env.REACT_APP_REDIRECT_URL ??
+            "https://fixna.us-cdp2.choreoapps.dev",
           signOutRedirectURL:
-            process.env.REACT_APP_REDIRECT_URL ?? "http://localhost:3000",
+            process.env.REACT_APP_REDIRECT_URL ??
+            "https://fixna.us-cdp2.choreoapps.dev",
           clientID:
-            process.env.REACT_APP_CLIENT_ID ?? "rW80oacvfXi_BM2HlRYlYIhQlxwa",
+            process.env.REACT_APP_CLIENT_ID ?? "Vhfy5n6BodmKviKxQXKYsa4eW7sa",
           baseUrl:
             process.env.REACT_APP_ASGARDEO_URL ??
-            "https://api.asgardeo.io/t/logicppna",
+            "https://api.asgardeo.io/t/logicppna	",
           scope: ["openid", "profile"],
         }}
       >

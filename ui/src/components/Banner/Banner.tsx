@@ -17,7 +17,6 @@ export const Banner = () => {
     if (state.isAuthenticated) {
       navigate(n.DASHBOARD);
     }
-    console.log("state", state);
   });
 
   const handleSignIn = () => {
@@ -35,7 +34,7 @@ export const Banner = () => {
           />
         </div>
         <h1 key="h1">Fix Namibia</h1>
-        <p key="content">Report incidents and defects in your town</p>
+        <p key="content">Report defects in your town</p>
         <div key="button" className="button-wrapper">
           <Button
             type="primary"
@@ -46,7 +45,10 @@ export const Banner = () => {
             Login
           </Button>
           <a
-            href={process.env.REACT_APP_REGISTRATION_URL}
+            href={
+              process.env.REACT_APP_REGISTRATION_URL ??
+              "https://accounts.asgardeo.io/t/logicppna/accountrecoveryendpoint/register.do"
+            }
             target="_blank"
             rel="noopener noreferrer"
           >
