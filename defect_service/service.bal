@@ -86,7 +86,7 @@ service / on new http:Listener(9090) {
      http:Response response = new;
      response.statusCode = http:STATUS_OK;
      response.setPayload({message: "New issue successfully submitted",
-                          issue_id: the_user_id});
+                          issue_id: the_issue_id});
      return response;
     }
 }
