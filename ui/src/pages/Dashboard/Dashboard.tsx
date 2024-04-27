@@ -65,7 +65,9 @@ const Dashboard = () => {
     console.log(fileList.length)
 
     const t = await getAccessToken();
-    const api = new DefectsApi(getApiConfig(t));
+    const c = getApiConfig(t)
+    console.log(c.accessToken)
+    const api = new DefectsApi(c);
     try {
       const img = fileList[0] as unknown as File
       console.log(img)

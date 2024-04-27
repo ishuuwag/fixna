@@ -58,6 +58,10 @@ export const DefectsApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
             const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
 
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
             if (defect !== undefined) { 
                 localVarFormParams.append('defect', new Blob([JSON.stringify(defect)], { type: "application/json", }));

@@ -13,6 +13,8 @@ paths:
     post:
       tags:
         - defects
+      security:
+        - bearerAuth: []
       summary: Create a defect
       operationId: createDefect
       requestBody:
@@ -51,7 +53,7 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: opaque
+      bearerFormat: jwt
   schemas:
     Defect:
       type: object
