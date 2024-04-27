@@ -1,0 +1,13 @@
+.gitignore
+.npmignore
+api.ts
+api/defects-api.ts
+base.ts
+common.ts
+configuration.ts
+git_push.sh
+index.ts
+models/app-error.ts
+models/create-defect-response.ts
+models/error-response.ts
+models/index.ts

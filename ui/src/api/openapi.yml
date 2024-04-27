@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: FixNa- OpenAPI 3.0
+  description: |-
+    OpenAPI specification for FixNa
+  contact:
+    name: Gervasius Ishuuwa
+    email: gervasius@logicpp.com.na
+    url: https://logicpp.com.na
+  version: 1.0.0
+paths:
+  /:
+    post:
+      tags:
+        - defects
+      summary: Create a defect
+      operationId: createDefect
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/CreateDefect"
+      responses:
+        "200":
+          description: Defect created successfuly
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateDefectResponse"
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error or unknown error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+  schemas:
+    Defect:
+      type: object
+      required:
+        - description
+        - town
+        - latitude
+        - longitude
+      properties:
+        description:
+          type: string
+        town:
+          type: string
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+    CreateDefect:
+      type: object
+      required:
+        - defect
+        - image
+      properties:
+        defect:
+          type: object
+          $ref: "#/components/schemas/Defect"
+        image:
+          type: string
+          format: binary
+    CreateDefectResponse:
+      type: object
+      required:
+        - message
+        - issue_id
+      properties:
+        message:
+          type: string
+        issue_id:
+          type: string
+    AppError:
+      type: object
+      required:
+        - code
+        - status
+        - message
+      properties:
+        code:
+          type: integer
+        status:
+          type: string
+        message:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          $ref: "#/components/schemas/AppError"

@@ -1,4 +1,4 @@
-import { Button, Col, Row } from "antd";
+import { Col, Row } from "antd";
 
 const HomeFooter = () => {
   return (
