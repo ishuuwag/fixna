@@ -48,7 +48,9 @@ service / on new http:Listener(9090) {
       //extract the correct field and create an issue
       string the_issue_id = string `defect_${counter}`;
       counter += counter;
-      child_part1.setJson({"issue_id": the_issue_id});
+      time:Date the_date = check incoming_payload.date.ensureType();
+      string converted_date = check dateToBasicString(the_date);
+      child_part1.setJson({"issue_id": the_issue_id, "date": converted_date});
       mime:Entity[] child_parts = [child_part1, child_part2];
       clt_parent_entity.setBodyParts(child_parts, contentType = mime:MULTIPART_MIXED);
       
@@ -58,8 +60,7 @@ service / on new http:Listener(9090) {
       http:Client httpClient = check new ("localhost:9092");
       string the_image_path = check httpClient->/store.post(req);
       
-      string the_user_id = check incoming_payload.token;
-      time:Date the_date = check incoming_payload.date.ensureType();
+      string the_user_id = check incoming_payload.token; 
       string the_town = check incoming_payload.town.ensureType();
       float the_latitude = check incoming_payload.latitude.ensureType();
       float the_longitude = check incoming_payload.longitud.ensureType();
@@ -84,7 +85,8 @@ service / on new http:Listener(9090) {
      //return the response object
      http:Response response = new;
      response.statusCode = http:STATUS_OK;
-     response.setPayload({message: "New issue successfully submitted"});
+     response.setPayload({message: "New issue successfully submitted",
+                          issue_id: the_user_id});
      return response;
     }
 }
@@ -95,4 +97,18 @@ function getBaseType(string contentType) returns string {
         return result.getBaseType();
     }
     panic result;
+}
+
+
+# converts time:Date value to 01/12/2015 format.
+#
+# + dateValue - Date value.
+# + return - string value.
+function dateToBasicString(time:Date dateValue) returns string|error {
+    string year = dateValue.year.toString();
+    string month = dateValue.month < 10 ? 
+        string `0${dateValue.month}` : dateValue.month.toString();
+    string date = dateValue.day < 10 ? 
+        string `0${dateValue.day}` : dateValue.day.toString();
+    return string `${date}/${month}/${year}`;
 }
