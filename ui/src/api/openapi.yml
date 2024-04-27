@@ -9,7 +9,7 @@ info:
     url: https://logicpp.com.na
   version: 1.0.0
 paths:
-  /:
+  /defects:
     post:
       tags:
         - defects

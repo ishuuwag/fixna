@@ -70,7 +70,7 @@ const Dashboard = () => {
       const img = fileList[0] as unknown as File
       console.log(img)
       const res = await api.createDefect(
-        { descrption: "test", town: "Windhoek", longitude: 27, latitude: 22 },
+        { description: "test", town: "Windhoek", longitude: 27, latitude: 22 },
         img
       );
 
