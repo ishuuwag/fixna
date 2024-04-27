@@ -1,6 +1,8 @@
 import defect_service.store;
 import ballerina/http;
 import ballerina/time;
+import ballerina/mime;
+
 
 configurable string host = ?;
 configurable int port = ?;
@@ -19,20 +21,49 @@ service / on new http:Listener(9090) {
   //int counter = 1;
 
     resource function post defects(http:Request the_req) returns http:Response|error {
-      json payload = check the_req.getJsonPayload();
-      // first step -- check the image and store it on a CDN which returns the image path
-      string the_image_path = "";
+      //here we will assume that the request has multiple parts
 
+      json incoming_payload = {};
+
+      mime:Entity clt_parent_entity = new;
+      mime:Entity child_part1 = new;
+      mime:Entity child_part2 = new;
+
+      mime:Entity[] the_parts =  check the_req.getBodyParts();
+      foreach var part in the_parts {
+        var mediaType = mime:getMediaType(part.getContentType());
+        if mediaType is mime:MediaType {
+          string base_type = mediaType.getBaseType();
+          if base_type == mime:APPLICATION_JSON {
+            incoming_payload = check part.getJson();
+              //string issue_id = check incoming_payload.ensureType.issue_id.ensureType();
+              //child_part1.setJson({"issue_id", issue_id});
+            } else if base_type == mime:IMAGE_JPEG {
+                child_part2 = part;
+              }
+          }
+      }
+
+      
       //extract the correct field and create an issue
       string the_issue_id = string `defect_${counter}`;
       counter += counter;
+      child_part1.setJson({"issue_id": the_issue_id});
+      mime:Entity[] child_parts = [child_part1, child_part2];
+      clt_parent_entity.setBodyParts(child_parts, contentType = mime:MULTIPART_MIXED);
       
-      string the_user_id = check payload.token;
-      time:Date the_date = check payload.date.ensureType();
-      string the_town = check payload.town.ensureType();
-      float the_latitude = check payload.latitude.ensureType();
-      float the_longitude = check payload.longitud.ensureType();
-      string the_description = check payload.description.ensureType();
+      http:Request req = new;
+      req.setBodyParts(child_parts, contentType = mime:MULTIPART_FORM_DATA);
+
+      http:Client httpClient = check new ("localhost:9092");
+      string the_image_path = check httpClient->/store.post(req);
+      
+      string the_user_id = check incoming_payload.token;
+      time:Date the_date = check incoming_payload.date.ensureType();
+      string the_town = check incoming_payload.town.ensureType();
+      float the_latitude = check incoming_payload.latitude.ensureType();
+      float the_longitude = check incoming_payload.longitud.ensureType();
+      string the_description = check incoming_payload.description.ensureType();
 
       //create the issue object
       store:Issue new_issue = {
@@ -56,5 +87,12 @@ service / on new http:Listener(9090) {
      response.setPayload({message: "New issue successfully submitted"});
      return response;
     }
+}
 
+function getBaseType(string contentType) returns string {
+    var result = mime:getMediaType(contentType);
+    if result is mime:MediaType {
+        return result.getBaseType();
+    }
+    panic result;
 }
