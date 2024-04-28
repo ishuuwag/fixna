@@ -102,20 +102,20 @@ const Dashboard = () => {
 
   const opts: PositionOptions = {
     enableHighAccuracy: true,
-    timeout: 5000,
+    timeout: 10000,
     maximumAge: 0,
   };
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.permissions.query({ name: "geolocation" }).then((result) => {
-        if (result.state === "granted" || result.state === "prompt") {
+        if (result.state === "prompt") {
           navigator.geolocation.getCurrentPosition(
             onGeoLocationGranted,
             onGeoLocationError,
             opts
           );
-        } else {
+        } else if (result.state === "denied") {
           messageApi.warning(
             "Geolocation was denied, application might not work properly"
           );
@@ -198,8 +198,11 @@ const Dashboard = () => {
                 rules={[{ required: true }]}
               >
                 <InputNumber
-                  defaultValue={22.5649}
-                  value={location?.longitude}
+                  value={
+                    location?.longitude === undefined
+                      ? 22.5649
+                      : -location.longitude
+                  }
                   stringMode
                   step={0.0001}
                 />
@@ -210,8 +213,11 @@ const Dashboard = () => {
                 rules={[{ required: true }]}
               >
                 <InputNumber
-                  defaultValue={-17.0842}
-                  value={location?.latitude}
+                  value={
+                    location?.latitude === undefined
+                      ? -17.0842
+                      : -location.latitude
+                  }
                   stringMode
                   step={0.0001}
                 />
