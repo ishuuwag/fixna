@@ -48,8 +48,9 @@ service / on new http:Listener(9090) {
       //extract the correct field and create an issue
       string the_issue_id = string `defect_${counter}`;
       counter += counter;
-      time:Date the_date = check incoming_payload.date.ensureType();
-      string converted_date = check dateToBasicString(the_date);
+      time:Utc utc = time:utcNow(); 
+      string converted_date = time:utcToString(utc);
+      time:Date the_date = check dateFromBasicString(converted_date);
       child_part1.setJson({"issue_id": the_issue_id, "date": converted_date});
       mime:Entity[] child_parts = [child_part1, child_part2];
       clt_parent_entity.setBodyParts(child_parts, contentType = mime:MULTIPART_MIXED);
@@ -111,4 +112,13 @@ function dateToBasicString(time:Date dateValue) returns string|error {
     string date = dateValue.day < 10 ? 
         string `0${dateValue.day}` : dateValue.day.toString();
     return string `${date}/${month}/${year}`;
+}
+
+
+function dateFromBasicString(string sValue) returns time:Date|error {
+    string[] splittedValues = re `/`.split(sValue.trim());
+    int day = check int:'fromString(splittedValues[0]);
+    int month = check int:'fromString(splittedValues[1]);
+    int year = check int:'fromString(splittedValues[2]);
+    return {year, month, day};
 }
