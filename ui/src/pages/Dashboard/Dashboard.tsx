@@ -4,6 +4,7 @@ import {
   Button,
   Form,
   Input,
+  InputNumber,
   Layout,
   Menu,
   Select,
@@ -78,7 +79,8 @@ const Dashboard = () => {
           description: desc,
           town: town,
           longitude: location?.longitude ?? 22.5649,
-          latitude: location?.latitude ?? 17.0842,
+          latitude:
+            location?.latitude === undefined ? -17.0842 : -location.latitude,
         },
         img
       );
@@ -91,6 +93,7 @@ const Dashboard = () => {
   };
 
   const onGeoLocationGranted = (position: GeolocationPosition) => {
+    console.log("coords", position.coords);
     setLocation(position.coords);
   };
   const onGeoLocationError = (err: GeolocationPositionError) => {
@@ -194,14 +197,24 @@ const Dashboard = () => {
                 label="Longitude"
                 rules={[{ required: true }]}
               >
-                <Input disabled value={location?.longitude} />
+                <InputNumber
+                  defaultValue={22.5649}
+                  value={location?.longitude}
+                  stringMode
+                  step={0.0001}
+                />
               </Form.Item>
               <Form.Item
                 name="latitude"
                 label="Latitude"
                 rules={[{ required: true }]}
               >
-                <Input disabled value={location?.latitude} />
+                <InputNumber
+                  defaultValue={-17.0842}
+                  value={location?.latitude}
+                  stringMode
+                  step={0.0001}
+                />
               </Form.Item>
               <Form.Item
                 name="image"
