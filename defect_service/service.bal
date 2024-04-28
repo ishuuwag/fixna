@@ -4,11 +4,7 @@ import ballerina/time;
 import ballerina/mime;
 
 
-configurable string host = ?;
-configurable int port = ?;
-configurable string user = ?;
 configurable string password = ?;
-configurable string database = ?;
 
 
 store:Client db_client = check new();
