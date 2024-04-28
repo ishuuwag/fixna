@@ -10,8 +10,8 @@ const Landing = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!state.isAuthenticated) {
-      navigate(n.HOME);
+    if (state.isAuthenticated) {
+      navigate(n.DASHBOARD);
     }
   });
 
