@@ -5,7 +5,10 @@ import ballerina/mime;
 
 
 configurable string password = ?;
-
+configurable string host = ?;
+configurable int port = ?;
+configurable string database = ?;
+configurable string user = ?;
 
 store:Client db_client = check new();
 int counter = 1;
