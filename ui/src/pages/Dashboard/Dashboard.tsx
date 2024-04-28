@@ -109,7 +109,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.permissions.query({ name: "geolocation" }).then((result) => {
-        if (result.state === "prompt") {
+        if (result.state === "prompt" || result.state === "granted") {
           navigator.geolocation.getCurrentPosition(
             onGeoLocationGranted,
             onGeoLocationError,
