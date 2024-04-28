@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Breadcrumb,
   Button,
@@ -13,6 +13,7 @@ import {
   UploadProps,
   theme,
   message,
+  Switch,
 } from "antd";
 import { LogoutOutlined, UploadOutlined } from "@ant-design/icons";
 import { useAuthContext } from "@asgardeo/auth-react";
@@ -93,11 +94,34 @@ const Dashboard = () => {
   };
 
   const onGeoLocationGranted = (position: GeolocationPosition) => {
-    console.log("coords", position.coords);
+    console.log("coords-before", location);
     setLocation(position.coords);
+    console.log("coords-after", location);
   };
+
+  const getCoordinates = async (checked: boolean) => {
+    if (checked) {
+      if (navigator.geolocation) {
+        const perm = await navigator.permissions.query({ name: "geolocation" });
+        if (perm.state === "granted" || perm.state === "prompt") {
+          navigator.geolocation.getCurrentPosition(
+            onGeoLocationGranted,
+            onGeoLocationError,
+            opts
+          );
+        } else {
+          messageApi.warning(
+            "Geolocation was denied, application might not work properly"
+          );
+        }
+      } else {
+        messageApi.warning("Geolocation is not supported by this browser.");
+      }
+    }
+  };
+
   const onGeoLocationError = (err: GeolocationPositionError) => {
-    messageApi.error(err.message);
+    messageApi.error(`Could not obtain geolocation: ${err.message}`);
   };
 
   const opts: PositionOptions = {
@@ -105,26 +129,6 @@ const Dashboard = () => {
     timeout: 10000,
     maximumAge: 0,
   };
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.permissions.query({ name: "geolocation" }).then((result) => {
-        if (result.state === "prompt" || result.state === "granted") {
-          navigator.geolocation.getCurrentPosition(
-            onGeoLocationGranted,
-            onGeoLocationError,
-            opts
-          );
-        } else if (result.state === "denied") {
-          messageApi.warning(
-            "Geolocation was denied, application might not work properly"
-          );
-        }
-      });
-    } else {
-      messageApi.warning("Geolocation is not supported by this browser.");
-    }
-  });
 
   return (
     <>
@@ -193,16 +197,18 @@ const Dashboard = () => {
                 </Select>
               </Form.Item>
               <Form.Item
+                name="geolocation"
+                label="Get coordinates from my location"
+              >
+                <Switch onChange={getCoordinates} />
+              </Form.Item>
+              <Form.Item
                 name="longitude"
                 label="Longitude"
                 rules={[{ required: true }]}
               >
                 <InputNumber
-                  value={
-                    location?.longitude === undefined
-                      ? 22.5649
-                      : -location.longitude
-                  }
+                  value={location?.longitude}
                   stringMode
                   step={0.0001}
                 />
@@ -213,11 +219,7 @@ const Dashboard = () => {
                 rules={[{ required: true }]}
               >
                 <InputNumber
-                  value={
-                    location?.latitude === undefined
-                      ? -17.0842
-                      : -location.latitude
-                  }
+                  value={location?.latitude}
                   stringMode
                   step={0.0001}
                 />
