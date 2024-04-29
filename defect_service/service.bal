@@ -121,10 +121,10 @@ function dateFromBasicString(string sValue) returns time:Date|error {
 function dateFromBasicString2(string sValue) returns time:Date|error {
     string[] splittedValues = re `:`.split(sValue.trim());
     string[] second_split = re `-`.split(splittedValues[0].trim());
-    int day = check int:'fromString(second_split[0]);
+    int year = check int:'fromString(second_split[0]);
     int month = check int:'fromString(second_split[1]);
     string[] final_split = re `T`.split(second_split[2].trim());
-    int year = check int:'fromString(final_split[0]);
+    int day = check int:'fromString(final_split[0]);
     return {year, month, day};
 }
 
