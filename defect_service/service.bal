@@ -29,17 +29,13 @@ service / on new http:Listener(9090) {
       mime:Entity child_part2 = new;
 
       mime:Entity[] the_parts =  check the_req.getBodyParts();
+
       foreach var part in the_parts {
-        var mediaType = mime:getMediaType(part.getContentType());
-        if mediaType is mime:MediaType {
-          string base_type = mediaType.getBaseType();
-          if base_type == mime:APPLICATION_JSON {
-            incoming_payload = check part.getJson();
-              //string issue_id = check incoming_payload.ensureType.issue_id.ensureType();
-              //child_part1.setJson({"issue_id", issue_id});
-            } else if base_type == mime:IMAGE_JPEG {
-                child_part2 = part;
-              }
+          string base_type = getBaseType(part.getContentType());
+          if base_type is mime:APPLICATION_JSON {
+              incoming_payload = check part.getJson();
+          } else if base_type == mime:IMAGE_JPEG {
+              child_part2 = part;
           }
       }
 
@@ -60,7 +56,7 @@ service / on new http:Listener(9090) {
       http:Client httpClient = check new ("196.216.167.100:8080");
       string the_image_path = check httpClient->/store.post(req);
       
-      string the_user_id = check incoming_payload.token; 
+      string the_user_id = check incoming_payload.user_id.ensureType(); 
       string the_town = check incoming_payload.town.ensureType();
       float the_latitude = check incoming_payload.latitude.ensureType();
       float the_longitude = check incoming_payload.longitude.ensureType();
