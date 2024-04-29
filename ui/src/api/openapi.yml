@@ -58,11 +58,14 @@ components:
     Defect:
       type: object
       required:
+        - user_id
         - description
         - town
         - latitude
         - longitude
       properties:
+        user_id:
+          type: string
         description:
           type: string
         town:

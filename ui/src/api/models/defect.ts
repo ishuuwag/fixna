@@ -24,7 +24,9 @@ export interface Defect {
      * 
      * @type {number}
      * @memberof Defect
+     * 
      */
+    'user_id': string;
     'description': string;
     /**
      * 
