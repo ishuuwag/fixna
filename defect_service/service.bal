@@ -38,14 +38,13 @@ service / on new http:Listener(9090) {
               child_part2 = part;
           }
       }
-
       
       //extract the correct field and create an issue
       string the_issue_id = string `defect_${counter}`;
       counter += counter;
       time:Utc utc = time:utcNow(); 
       string converted_date = time:utcToString(utc);
-      time:Date the_date = check dateFromBasicString(converted_date);
+      time:Date the_date = check dateFromBasicString2(converted_date);
       child_part1.setJson({"issue_id": the_issue_id, "date": converted_date});
       mime:Entity[] child_parts = [child_part1, child_part2];
       clt_parent_entity.setBodyParts(child_parts, contentType = mime:MULTIPART_MIXED);
@@ -117,3 +116,15 @@ function dateFromBasicString(string sValue) returns time:Date|error {
     int year = check int:'fromString(splittedValues[2]);
     return {year, month, day};
 }
+
+
+function dateFromBasicString2(string sValue) returns time:Date|error {
+    string[] splittedValues = re `:`.split(sValue.trim());
+    string[] second_split = re `-`.split(splittedValues[0].trim());
+    int day = check int:'fromString(second_split[0]);
+    int month = check int:'fromString(second_split[1]);
+    string[] final_split = re `T`.split(second_split[2].trim());
+    int year = check int:'fromString(final_split[0]);
+    return {year, month, day};
+}
+
