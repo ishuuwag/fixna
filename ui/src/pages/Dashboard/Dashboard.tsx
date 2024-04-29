@@ -44,7 +44,7 @@ const Dashboard = () => {
     undefined
   );
 
-  const { signOut, getAccessToken } = useAuthContext();
+  const { signOut, getAccessToken, state } = useAuthContext();
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleSignOut = () => {
@@ -77,6 +77,7 @@ const Dashboard = () => {
       const img = fileList[0] as unknown as File;
       const res = await api.createDefect(
         {
+          user_id: state.sub ?? "",
           description: desc,
           town: town,
           longitude: location?.longitude ?? 22.5649,
