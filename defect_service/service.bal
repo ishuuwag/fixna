@@ -57,13 +57,13 @@ service / on new http:Listener(9090) {
       http:Request req = new;
       req.setBodyParts(child_parts, contentType = mime:MULTIPART_FORM_DATA);
 
-      http:Client httpClient = check new ("localhost:9092");
+      http:Client httpClient = check new ("196.216.167.100:8080");
       string the_image_path = check httpClient->/store.post(req);
       
       string the_user_id = check incoming_payload.token; 
       string the_town = check incoming_payload.town.ensureType();
       float the_latitude = check incoming_payload.latitude.ensureType();
-      float the_longitude = check incoming_payload.longitud.ensureType();
+      float the_longitude = check incoming_payload.longitude.ensureType();
       string the_description = check incoming_payload.description.ensureType();
 
       //create the issue object
