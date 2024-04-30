@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Breadcrumb,
   Button,
@@ -18,9 +18,11 @@ import {
 import { LogoutOutlined, UploadOutlined } from "@ant-design/icons";
 import { useAuthContext } from "@asgardeo/auth-react";
 import ContentFooter from "../../components/Footer/ContentFooter";
-import MenuItem from "antd/es/menu/MenuItem";
 import { DefectsApi } from "../../api";
 import { getApiConfig } from "../../utils/api";
+import { SelectInfo } from "rc-menu/lib/interface";
+import { useNavigate } from "react-router-dom";
+import * as n from "../../routes/navigation";
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -45,6 +47,7 @@ const Dashboard = () => {
   );
 
   const { signOut, getAccessToken, state } = useAuthContext();
+  const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleSignOut = () => {
@@ -132,11 +135,26 @@ const Dashboard = () => {
     messageApi.error(`Could not obtain geolocation: ${err.message}`);
   };
 
+  const handleMenuSeletion = (e: SelectInfo) => {
+    if (e.key === "2") {
+      console.log("test");
+    }
+  };
+
   const opts: PositionOptions = {
     enableHighAccuracy: true,
     timeout: 10000,
     maximumAge: 0,
   };
+
+  const items = [
+    { label: "Enter defect", key: "1" },
+    { label: "All defects", key: "2" },
+  ];
+
+  useEffect(() => {
+    if (!state.isAuthenticated) navigate(n.HOME);
+  });
 
   return (
     <>
@@ -157,10 +175,9 @@ const Dashboard = () => {
             mode="horizontal"
             defaultSelectedKeys={["1"]}
             style={{ flex: 1, minWidth: 0 }}
-          >
-            <MenuItem key={1}>Enter defect</MenuItem>
-            <MenuItem key={2}>All defects</MenuItem>
-          </Menu>
+            items={items}
+            onSelect={handleMenuSeletion}
+          ></Menu>
           <Button
             type="primary"
             icon={<LogoutOutlined />}

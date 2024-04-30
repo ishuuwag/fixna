@@ -48,6 +48,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    get:
+      tags:
+        - defects
+      security:
+        - bearerAuth: []
+      summary: Get all defect
+      operationId: getDefects
+      responses:
+        "200":
+          description: Defects fetched successfuly
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssuesResponse"
+        "400":
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: User not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error or unknown error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   securitySchemes:
     bearerAuth:
@@ -55,6 +87,39 @@ components:
       scheme: bearer
       bearerFormat: jwt
   schemas:
+    IssuesResponse:
+      type: object
+      required:
+        - message
+        - issues
+      properties:
+        message:
+          type: string
+        issues:
+          type: array
+          items:
+            $ref: "#/components/schemas/Issue"
+    Issue:
+      type: object
+      required:
+        - issue_id
+        - description
+        - date
+        - latitude
+        - longitude
+      properties:
+        issue_id:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
     Defect:
       type: object
       required:

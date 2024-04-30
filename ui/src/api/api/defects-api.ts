@@ -25,6 +25,8 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 import { CreateDefectResponse } from '../models';
 // @ts-ignore
 import { ErrorResponse } from '../models';
+// @ts-ignore
+import { IssuesResponse } from '../models';
 import { Defect } from '../models/defect';
 /**
  * DefectsApi - axios parameter creator
@@ -84,6 +86,40 @@ export const DefectsApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Get all defect
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDefects: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/defects`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -104,6 +140,16 @@ export const DefectsApiFp = function(configuration?: Configuration) {
          */
         async createDefect(defect: Defect, image: File, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateDefectResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createDefect(defect, image, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get all defect
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDefects(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<IssuesResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDefects(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -127,6 +173,15 @@ export const DefectsApiFactory = function (configuration?: Configuration, basePa
         createDefect(defect: Defect, image: File, options?: any): AxiosPromise<CreateDefectResponse> {
             return localVarFp.createDefect(defect, image, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Get all defect
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDefects(options?: any): AxiosPromise<IssuesResponse> {
+            return localVarFp.getDefects(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -148,5 +203,16 @@ export class DefectsApi extends BaseAPI {
      */
     public createDefect(defect: Defect, image: File, options?: AxiosRequestConfig) {
         return DefectsApiFp(this.configuration).createDefect(defect, image, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get all defect
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefectsApi
+     */
+    public getDefects(options?: AxiosRequestConfig) {
+        return DefectsApiFp(this.configuration).getDefects(options).then((request) => request(this.axios, this.basePath));
     }
 }
