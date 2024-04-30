@@ -53,9 +53,14 @@ const Defects = () => {
     navigate(n.HOME);
   };
 
+  
   const handleMenuSeletion = (e: SelectInfo) => {
     if (e.key === "2") {
-      console.log("test");
+      navigate(n.DEFECTS);
+    }
+
+    if (e.key === "1") {
+      navigate(n.DASHBOARD);
     }
   };
 

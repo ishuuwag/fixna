@@ -89,12 +89,15 @@ const Dashboard = () => {
         },
         img
       );
-      form.resetFields()
+      console.log(res);
+      form.resetFields();
       setLoading(false);
-      messageApi.success("Defect created sucessfully!")
+      messageApi.success("Defect created sucessfully!");
     } catch (err: any) {
       setLoading(false);
-      messageApi.error(`Could not create defect: ${err?.message}. Please try again`)
+      messageApi.error(
+        `Could not create defect: ${err?.message}. Please try again`
+      );
       console.log(err);
     }
   };
@@ -139,7 +142,11 @@ const Dashboard = () => {
 
   const handleMenuSeletion = (e: SelectInfo) => {
     if (e.key === "2") {
-      console.log("test");
+      navigate(n.DEFECTS);
+    }
+
+    if (e.key === "1") {
+      navigate(n.DASHBOARD);
     }
   };
 
