@@ -114,6 +114,7 @@ const Defects = () => {
         setDefects(res?.data?.issues);
         setLoading(false);
       } catch (err: any) {
+        console.log(err);
         setLoading(false);
         messageApi.error(
           `Couldn't fetch defects: ${err.message}. Please try again.`

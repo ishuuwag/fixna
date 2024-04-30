@@ -89,10 +89,12 @@ const Dashboard = () => {
         },
         img
       );
+      form.resetFields()
       setLoading(false);
-      console.log(res);
-    } catch (err) {
+      messageApi.success("Defect created sucessfully!")
+    } catch (err: any) {
       setLoading(false);
+      messageApi.error(`Could not create defect: ${err?.message}. Please try again`)
       console.log(err);
     }
   };
