@@ -95,9 +95,16 @@ const Dashboard = () => {
   };
 
   const onGeoLocationGranted = (position: GeolocationPosition) => {
-    console.log("coords-before", location);
-    setLocation(position.coords);
-    console.log("coords-after", location);
+    if (location) {
+      form.setFieldValue("latitude", position.coords.latitude);
+      form.setFields([
+        { name: "latitude", value: position.coords.latitude },
+        { name: "longitude", value: position.coords.longitude },
+      ]);
+      setLocation(position.coords);
+    } else {
+      messageApi.warning("Could not get corddinates please try again");
+    }
   };
 
   const getCoordinates = async (checked: boolean) => {
@@ -197,33 +204,25 @@ const Dashboard = () => {
                   <Option value="Windhoek">Windhoek</Option>
                 </Select>
               </Form.Item>
-              <Form.Item
-                name="geolocation"
-                label="Get coordinates from my location"
-              >
-                <Switch onChange={getCoordinates} />
+              <Form.Item name="geolocation" label="Use my current location">
+                <Switch
+                  onChange={getCoordinates}
+                  checked={location !== undefined}
+                />
               </Form.Item>
               <Form.Item
                 name="longitude"
                 label="Longitude"
                 rules={[{ required: true }]}
               >
-                <InputNumber
-                  value={location?.longitude}
-                  stringMode
-                  step={0.0001}
-                />
+                <InputNumber stringMode step={0.0000001} />
               </Form.Item>
               <Form.Item
                 name="latitude"
                 label="Latitude"
                 rules={[{ required: true }]}
               >
-                <InputNumber
-                  value={location?.latitude}
-                  stringMode
-                  step={0.0001}
-                />
+                <InputNumber stringMode step={0.0000001} />
               </Form.Item>
               <Form.Item
                 name="image"
