@@ -1,3 +1,4 @@
+import ballerina/persist;
 import defect_service.store;
 import ballerina/http;
 import ballerina/time;
@@ -84,7 +85,32 @@ service / on new http:Listener(9090) {
                           issue_id: the_issue_id});
      return response;
     }
+
+    resource function get defects() returns http:Response|error {
+      json[] issue_details = [];
+      stream<store:Issue, persist:Error?> all_issues = db_client->/issues;
+      check from var an_issue in all_issues do {
+        string changed_date = an_issue.capture_date.toString();
+        issue_details.push({issue_id: an_issue.issue_id, description: an_issue.description, date: changed_date, latitude: an_issue.latitude, longitude: an_issue.longitude});
+      };
+      http:Response resp = new;
+      resp.statusCode = http:STATUS_OK;
+      resp.setPayload({message: "All issues successfully fetched", issues: issue_details});
+      return resp;
+    }
+
+    resource function get defects/[string issue_id]() returns http:Response|error {
+      store:Issue the_issue = check db_client->/issues/[issue_id];
+      http:Response resp = new;
+      resp.statusCode = 200;
+      json issue_2j = {description: the_issue.description, date: the_issue.capture_date.toString(), latitude: the_issue.latitude, longitude: the_issue.longitude} ;
+      resp.setPayload({message: "Object successfully fetched", 
+                      issue: issue_2j});
+      return resp;
+    } 
 }
+
+
 
 function getBaseType(string contentType) returns string {
     var result = mime:getMediaType(contentType);
