@@ -11,3 +11,5 @@ models/app-error.ts
 models/create-defect-response.ts
 models/error-response.ts
 models/index.ts
+models/issue.ts
+models/issues-response.ts

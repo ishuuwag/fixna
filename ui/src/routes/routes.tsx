@@ -12,7 +12,7 @@ const Loadable = (Component: LazyExoticComponent<FC>) => (props: any) => {
 
 const Landing = Loadable(lazy(() => import("../pages/Landing/Landing")));
 const Dashboard = Loadable(lazy(() => import("../pages/Dashboard/Dashboard")));
-
+const Defects = Loadable(lazy(() => import("../pages/Defects/Defects")));
 // 404/Error page
 const Error = Loadable(lazy(() => import("../pages/404/404")));
 
@@ -25,6 +25,10 @@ const routes = () => {
     {
       path: n.DASHBOARD,
       element: <Dashboard />,
+    },
+    {
+      path: n.DEFECTS,
+      element: <Defects />,
     },
     {
       path: "*",
